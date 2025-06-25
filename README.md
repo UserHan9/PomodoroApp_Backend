@@ -1,3 +1,3 @@
 # PomodoroApp_Backend
 
-BACKEND FOR PomodoroApp_Front
+DJANGO BACKEND FOR PomodoroApp_Front
