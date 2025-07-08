@@ -13,8 +13,10 @@ class PomodoroSession(models.Model):
 ##ADD QUOTE DATABASE MODEL
 class Motivasi(models.Model):
     teks = models.TextField()
-    sumber = models.CharField(max_length=100, blank=True)
+    pembuat = models.CharField(max_length=100, blank=True)
     tanggal_dibuat = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.teks[:50]
+
+

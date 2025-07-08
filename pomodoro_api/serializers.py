@@ -5,9 +5,9 @@ from .models import Motivasi
 class PomodoroSessionSerializer(serializers.ModelSerializer):
     class Meta:
         model = PomodoroSession
-        fields = '__all__'
+        fields = ['id', 'start_time', 'end_time', 'success']
 
 class MotivasiSerializer(serializers.ModelSerializer):
     class Meta:
         model = Motivasi
-        fields = '__all__'
+        fields = ['id','teks','pembuat']
