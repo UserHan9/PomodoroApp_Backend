@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import PomodoroSession, Motivasi  
 
-# Register your models here.
+# Daftarkan model
+admin.site.register(PomodoroSession)
+admin.site.register(Motivasi)

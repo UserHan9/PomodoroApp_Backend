@@ -9,3 +9,12 @@ class PomodoroSession(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {'Success' if self.success else 'Failed'}"
+
+##ADD QUOTE DATABASE MODEL
+class Motivasi(models.Model):
+    teks = models.TextField()
+    sumber = models.CharField(max_length=100, blank=True)
+    tanggal_dibuat = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.teks[:50]
