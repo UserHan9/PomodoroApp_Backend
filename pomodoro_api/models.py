@@ -10,7 +10,7 @@ class PomodoroSession(models.Model):
     def __str__(self):
         return f"{self.user.username} - {'Success' if self.success else 'Failed'}"
 
-##ADD QUOTE DATABASE MODEL
+##QUOTE DATABASE MODEL
 class Motivasi(models.Model):
     teks = models.TextField()
     pembuat = models.CharField(max_length=100, blank=True)
@@ -20,3 +20,11 @@ class Motivasi(models.Model):
         return self.teks[:50]
 
 
+##TIME ENTRY DATABASE MODEL
+class TimeEntry(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='time_entries')
+    duration = models.IntegerField(help_text="Duration in seconds")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.duration}s at {self.created_at}"
