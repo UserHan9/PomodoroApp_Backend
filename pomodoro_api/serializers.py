@@ -18,8 +18,4 @@ class MotivasiSerializer(serializers.ModelSerializer):
 class TimeEntrySerializer(serializers.ModelSerializer):
     class Meta:
         model = TimeEntry
-        fields = ['id', 'duration', 'activity', 'created_at']
-
-    def create(self, validated_data):
-        validated_data['user'] = self.context['request'].user
-        return super().create(validated_data)
+        fields = ['id', 'duration', 'created_at']
