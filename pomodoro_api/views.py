@@ -42,16 +42,16 @@ class RegisterView(APIView):
 
 
 class TimeEntryView(APIView):
-    permission_classes = [AllowAny]  # Allow access without authentication
+    permission_classes = [IsAuthenticated]
 
     def post(self, request):
         serializer = TimeEntrySerializer(data=request.data)
         if serializer.is_valid():
-            serializer.save()
+            serializer.save(user=request.user)  # user token
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def get(self, request):
-        entries = TimeEntry.objects.all()  # Return all entries since no user info
+        entries = TimeEntry.objects.filter(user=request.user)
         serializer = TimeEntrySerializer(entries, many=True)
         return Response(serializer.data)
