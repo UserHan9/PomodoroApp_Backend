@@ -2,7 +2,7 @@ from email.policy import HTTP
 from urllib import response
 from rest_framework import viewsets
 from .models import PomodoroSession,Motivasi, TimeEntry
-from .serializers import PomodoroSessionSerializer,MotivasiSerializer,TimeEntrySerializer
+from .serializers import PomodoroSessionSerializer,MotivasiSerializer,TimeEntrySerializer,RegisterSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -30,21 +30,16 @@ class RegisterView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
-        username = request.data.get('username')
-        email = request.data.get('email')
-        password = request.data.get('password')
+        serializer = RegisterSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+            }, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-        if User.objects.filter(username=username).exists():
-            return Response({"error": "Username sudah digunakan"}, status=status.HTTP_400_BAD_REQUEST)
-        
-        user = User.objects.create_user(username=username, email=email, password=password)
-        refresh = RefreshToken.for_user(user)
-        
-
-        return Response({
-            'refresh': str(refresh),
-            'access': str(refresh.access_token),
-        }, status=status.HTTP_201_CREATED)
 
 class TimeEntryView(APIView):
     permission_classes = [AllowAny]  # Allow access without authentication

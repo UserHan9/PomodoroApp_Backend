@@ -27,3 +27,5 @@ class TimeEntry(models.Model):
 
     def __str__(self):
         return f"{self.duration}s at {self.created_at}"
+    
+##REGISTER DATABASE MODEL
