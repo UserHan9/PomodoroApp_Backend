@@ -1,5 +1,9 @@
+from ast import List
 from email.policy import HTTP
 from urllib import response
+from rest_framework.permissions import IsAdminUser
+from rest_framework.generics import ListAPIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework import viewsets
 from .models import PomodoroSession,Motivasi, TimeEntry
 from .serializers import PomodoroSessionSerializer,MotivasiSerializer,TimeEntrySerializer,RegisterSerializer
@@ -12,8 +16,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.permissions import IsAuthenticated
 
 
-
-
+##SESSION VIEW
 class PomodoroSessionViewSet(viewsets.ModelViewSet):
     queryset = PomodoroSession.objects.all()
     serializer_class = PomodoroSessionSerializer
@@ -22,10 +25,12 @@ class PomodoroSessionViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
 
+##MOTIVATION VIEW
 class MotivasiViewSet(viewsets.ModelViewSet):
     queryset = Motivasi.objects.all().order_by('-tanggal_dibuat')
     serializer_class = MotivasiSerializer
 
+##REGISTER VIEW
 class RegisterView(APIView):
     permission_classes = [AllowAny]
 
@@ -40,7 +45,7 @@ class RegisterView(APIView):
             }, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
+##TIMEENTRY VIEW
 class TimeEntryView(APIView):
     permission_classes = [IsAuthenticated]
 
@@ -55,3 +60,15 @@ class TimeEntryView(APIView):
         entries = TimeEntry.objects.filter(user=request.user)
         serializer = TimeEntrySerializer(entries, many=True)
         return Response(serializer.data)
+
+class TimeEntryPagination(PageNumberPagination):
+    page_size = 5  
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
+##TIMEENTRY ATMIN ONLY
+class AdminTimeEntryView(ListAPIView):
+    permission_classes = [IsAdminUser]
+    serializer_class = TimeEntrySerializer
+    queryset = TimeEntry.objects.all().order_by('-created_at')
+    pagination_class = TimeEntryPagination
