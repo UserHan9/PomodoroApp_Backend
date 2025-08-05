@@ -60,6 +60,7 @@ class TimeEntryView(APIView):
         entries = TimeEntry.objects.filter(user=request.user)
         serializer = TimeEntrySerializer(entries, many=True)
         return Response(serializer.data)
+    
 
 class TimeEntryPagination(PageNumberPagination):
     page_size = 5  
